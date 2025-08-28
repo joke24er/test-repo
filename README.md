@@ -1,257 +1,238 @@
-# Document Analysis Workflow System
+# Persona Workflow System
 
-A comprehensive agentic workflow system for document analysis with selectable personas, built using LangGraph, LangChain, and FastAPI.
+A sophisticated multi-persona workflow system built with LangChain that allows users to create custom workflows using specialized AI personas. Each persona is a glorified prompt template that can be chained together to provide comprehensive analysis.
 
-## 🚀 Features
+## Features
 
-- **Selectable Personas**: Choose from predefined personas or create custom ones for different types of analysis
-- **Workflow Creation**: Build custom workflows by combining multiple personas
-- **LangGraph Integration**: Uses LangGraph for orchestrated workflow execution
-- **Agent vs Prompt Decision**: Automatically determines whether to use agents or prompts based on complexity
-- **Interactive Chat**: Chat with your analysis results for deeper insights
-- **REST API**: Full REST API for integration with other systems
-- **Web Interface**: Streamlit-based frontend for easy interaction
+- **Multi-Persona Workflows**: Chain multiple personas together in custom sequences
+- **Context Awareness**: Each persona can access outputs from previous personas
+- **Parallel Processing**: Support for parallel execution where appropriate
+- **Structured Outputs**: Consistent, parseable outputs with confidence scores
+- **Chat Interface**: Interactive chat with workflow results
+- **Web Interface**: Beautiful, modern web UI for easy interaction
+- **Flexible Configuration**: Load personas from config files or prompt directories
 
-## 🏗️ Architecture
+## Personas Included
 
-### Core Components
+1. **Risk Assessment** - Identifies and evaluates potential risks
+2. **Claims Analysis** - Analyzes claims data and identifies patterns
+3. **Compliance Review** - Ensures adherence to regulatory requirements
+4. **Financial Analysis** - Analyzes financial data and provides insights
+5. **Operational Excellence** - Focuses on operational efficiency
+6. **Summary Only** - Creates concise summaries of complex information
 
-1. **Persona Manager** (`src/personas.py`)
-   - Manages predefined and custom personas
-   - Determines persona type (Agent vs Prompt)
-   - Handles persona creation and deletion
+## Why LangChain?
 
-2. **Workflow Engine** (`src/workflow_engine.py`)
-   - LangGraph-based workflow execution
-   - Orchestrates persona analysis
-   - Handles both simple prompts and complex agents
+For your use case, LangChain is the better choice over direct API calls because:
 
-3. **Chat System** (`src/chat_system.py`)
-   - Interactive chat with analysis results
-   - Conversation memory and history
-   - Analysis summaries and comparisons
+1. **Workflow Orchestration**: Built-in support for complex multi-step workflows
+2. **Memory Management**: Automatic context and conversation history management
+3. **Prompt Management**: Better organization and templating of your existing prompts
+4. **Observability**: Built-in tracing and monitoring capabilities
+5. **Extensibility**: Easy to add new personas or modify existing ones
+6. **Structured Outputs**: Better handling of complex, multi-format responses
 
-4. **API Layer** (`src/api.py`)
-   - FastAPI-based REST API
-   - Complete CRUD operations
-   - File upload and processing
+## Quick Start
 
-5. **Frontend** (`frontend/app.py`)
-   - Streamlit-based web interface
-   - Intuitive workflow creation
-   - Real-time analysis and chat
+### 1. Installation
 
-## 📋 Predefined Personas
-
-### Agent Personas (Complex Analysis)
-- **Contract Review Specialist**: Legal contract analysis with risk assessment
-- **Financial Analyst**: Financial statement analysis with ratios and trends
-- **Risk Management Specialist**: Comprehensive risk evaluation and mitigation
-- **Market Intelligence Analyst**: Market analysis and competitive intelligence
-
-### Prompt Personas (Simple Analysis)
-- **Technical Reviewer**: Technical document review and feasibility
-- **Compliance Officer**: Regulatory compliance and governance analysis
-
-## 🛠️ Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd document-analysis-workflow
-   ```
-
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your OpenAI API key
-   ```
-
-4. **Run the API server**
-   ```bash
-   python app.py
-   ```
-
-5. **Run the frontend** (in a new terminal)
-   ```bash
-   cd frontend
-   streamlit run app.py
-   ```
-
-## 🚀 Quick Start
-
-1. **Start the system**
-   - API will be available at `http://localhost:8000`
-   - Frontend will be available at `http://localhost:8501`
-
-2. **Create a workflow**
-   - Go to the "Workflows" page
-   - Select personas for your analysis
-   - Save the workflow
-
-3. **Run analysis**
-   - Upload a document or paste content
-   - Select your workflow
-   - Execute the analysis
-
-4. **Chat with results**
-   - Go to the "Chat" page
-   - Select your analysis
-   - Ask questions about the results
-
-## 📚 API Documentation
-
-### Personas
-- `GET /personas` - Get all personas
-- `GET /personas/{id}` - Get specific persona
-- `POST /personas` - Create custom persona
-- `DELETE /personas/{id}` - Delete custom persona
-
-### Workflows
-- `GET /workflows` - Get all workflows
-- `GET /workflows/{id}` - Get specific workflow
-- `POST /workflows` - Create new workflow
-
-### Analysis
-- `POST /analysis/execute` - Execute workflow with document
-- `GET /analysis/{id}` - Get analysis result
-- `GET /analysis/user/{user_id}` - Get user's analyses
-
-### Chat
-- `POST /chat/send` - Send chat message
-- `GET /chat/{analysis_id}/history` - Get chat history
-- `DELETE /chat/{analysis_id}/history` - Clear chat history
-- `GET /chat/{analysis_id}/summary` - Get analysis summary
-
-## 🔧 Configuration
-
-### Environment Variables
 ```bash
-OPENAI_API_KEY=your_openai_api_key
-HOST=0.0.0.0
-PORT=8000
-DEBUG=False
+pip install -r requirements.txt
 ```
 
-### Persona Types
+### 2. Set up your OpenAI API key
 
-The system automatically determines whether to use an **Agent** or **Prompt** based on complexity:
-
-**Agent Personas** (Complex Analysis):
-- Contract Review: Multi-step legal analysis
-- Financial Analysis: Complex calculations and ratios
-- Risk Management: Comprehensive risk matrix
-- Market Intelligence: Strategic analysis
-
-**Prompt Personas** (Simple Analysis):
-- Technical Review: Straightforward technical assessment
-- Compliance Review: Regulatory compliance check
-
-## 📖 Usage Examples
-
-### Creating a Custom Persona
-```python
-from src.personas import persona_manager
-
-persona = persona_manager.create_custom_persona(
-    name="Custom Analyst",
-    description="Specialized analysis for specific domain",
-    prompt_template="Analyze this document for {specific_criteria}...",
-    analysis_focus=["custom_analysis", "domain_specific"],
-    created_by="user123"
-)
-```
-
-### Executing a Workflow
-```python
-from src.workflow_engine import workflow_engine
-from src.models import DocumentInput
-
-document = DocumentInput(
-    content="Your document content here...",
-    filename="document.txt",
-    file_type="text/plain"
-)
-
-result = workflow_engine.execute_workflow(
-    workflow_id="workflow_id",
-    document=document,
-    user_id="user123"
-)
-```
-
-### Chatting with Analysis
-```python
-from src.chat_system import chat_system
-from src.models import ChatRequest
-
-chat_request = ChatRequest(
-    analysis_id="analysis_id",
-    message="What are the key risks identified?",
-    user_id="user123"
-)
-
-response = chat_system.send_message(chat_request)
-```
-
-## 🧪 Testing
-
-### Sample Documents
-The `examples/` directory contains sample documents for testing:
-- `sample_contract.txt` - Service agreement for contract analysis
-- `sample_financial_report.txt` - Financial report for financial analysis
-
-### Running Tests
 ```bash
-# Test the API
-curl http://localhost:8000/health
-
-# Test persona creation
-curl -X POST http://localhost:8000/personas \
-  -F "name=Test Persona" \
-  -F "description=Test description" \
-  -F "prompt_template=Analyze this document..." \
-  -F "analysis_focus=[\"test\"]" \
-  -F "created_by=test_user"
+export OPENAI_API_KEY="your-api-key-here"
 ```
 
-## 🔒 Security Considerations
+### 3. Run the web interface
 
-- API keys are stored in environment variables
-- No external web search or API calls (firewall-compliant)
-- Input validation on all endpoints
-- CORS configured for web interface
+```bash
+python web_interface.py
+```
 
-## 🤝 Contributing
+Visit `http://localhost:8000` to access the web interface.
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+## Integrating Your Manager's Existing Prompts
 
-## 📄 License
+### Option 1: Configuration File
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+Create a `persona_config.json` file:
 
-## 🆘 Support
+```json
+[
+  {
+    "name": "Risk Assessment",
+    "description": "Your manager's risk assessment prompt",
+    "prompt_template": "Your manager's existing prompt template here...",
+    "temperature": 0.1,
+    "parallel_processing": false
+  }
+]
+```
 
-For support and questions:
-1. Check the API documentation at `http://localhost:8000/docs`
-2. Review the example documents in the `examples/` directory
-3. Open an issue on GitHub
+### Option 2: Prompt Files Directory
 
-## 🔮 Future Enhancements
+Create a `prompts/` directory and add your manager's prompts as text files:
 
-- Database persistence for workflows and analyses
-- User authentication and authorization
-- Advanced document parsing (PDF, DOCX)
-- Export functionality (PDF, Excel)
-- Integration with external document management systems
-- Advanced analytics and reporting
-- Multi-language support
+```
+prompts/
+├── Risk Assessment.txt
+├── Claims Analysis.txt
+├── Compliance Review.txt
+└── ...
+```
+
+### Option 3: Direct Integration
+
+Modify the `create_default_personas()` function in `persona_workflow.py`:
+
+```python
+def create_default_personas():
+    return {
+        "Risk Assessment": Persona(
+            name="Risk Assessment",
+            system_prompt="YOUR_MANAGER'S_PROMPT_HERE",
+            description="Your description"
+        ),
+        # ... other personas
+    }
+```
+
+## Usage Examples
+
+### Basic Workflow Execution
+
+```python
+from persona_workflow import WorkflowEngine, create_default_personas
+
+# Initialize engine
+engine = WorkflowEngine()
+personas = create_default_personas()
+for persona in personas.values():
+    engine.add_persona(persona)
+
+# Execute workflow
+input_text = "Your input text here..."
+persona_sequence = ["Risk Assessment", "Claims Analysis", "Summary Only"]
+results = engine.execute_workflow(input_text, persona_sequence)
+
+# Chat with results
+response = engine.chat_with_output("What are the main risks?", results)
+```
+
+### Advanced Workflow with Structured Outputs
+
+```python
+from advanced_workflow import AdvancedWorkflowEngine
+
+# Initialize advanced engine
+engine = AdvancedWorkflowEngine()
+
+# Load from config file
+engine.load_personas_from_config('persona_config.json')
+
+# Execute workflow
+results = engine.execute_workflow(input_text, persona_sequence)
+
+# Access structured outputs
+for persona_name, output in results.items():
+    print(f"Confidence: {output.confidence}")
+    print(f"Key Findings: {output.key_findings}")
+    print(f"Recommendations: {output.recommendations}")
+```
+
+## Architecture Benefits
+
+### 1. Sequential vs Parallel Processing
+
+- **Sequential**: Personas that depend on previous outputs (e.g., Summary after Analysis)
+- **Parallel**: Independent personas that can run simultaneously (e.g., Risk + Compliance)
+
+### 2. Context Flow
+
+```
+Input → Persona 1 → Context → Persona 2 → Context → Persona 3 → Final Output
+```
+
+Each persona receives:
+- Original input text
+- Context from all previous personas
+- Structured outputs for better understanding
+
+### 3. Chat Integration
+
+The chat system provides:
+- Context-aware responses based on workflow results
+- Conversation memory for follow-up questions
+- Ability to reference specific persona outputs
+
+## Customization
+
+### Adding New Personas
+
+1. **Simple Addition**:
+```python
+new_persona = Persona(
+    name="Custom Analysis",
+    system_prompt="Your custom prompt...",
+    description="Description of what this persona does"
+)
+engine.add_persona(new_persona)
+```
+
+2. **Advanced Addition**:
+```python
+config = PersonaConfig(
+    name="Custom Analysis",
+    description="Custom analysis persona",
+    prompt_template="Your template with {input_text} and {context}",
+    temperature=0.2,
+    parallel_processing=True
+)
+persona = AdvancedPersona(config)
+engine.personas[config.name] = persona
+```
+
+### Modifying Existing Personas
+
+```python
+# Update prompt template
+persona = engine.personas["Risk Assessment"]
+persona.system_prompt = "Your updated prompt..."
+```
+
+## Best Practices
+
+1. **Prompt Design**: Make prompts specific and include clear output formats
+2. **Temperature Settings**: Use lower temperatures (0.1-0.3) for analysis, higher (0.7-0.9) for creative tasks
+3. **Context Management**: Ensure personas can handle varying context sizes
+4. **Error Handling**: Implement fallbacks for parsing failures
+5. **Performance**: Use parallel processing for independent personas
+
+## Troubleshooting
+
+### Common Issues
+
+1. **API Key Not Set**: Ensure `OPENAI_API_KEY` environment variable is set
+2. **Import Errors**: Install all requirements with `pip install -r requirements.txt`
+3. **Prompt Parsing**: Check that your prompts use the correct template variables (`{input_text}`, `{context}`)
+
+### Performance Optimization
+
+- Use parallel processing for independent personas
+- Implement caching for repeated workflows
+- Consider using streaming for long-running personas
+
+## Future Enhancements
+
+- **Agent Integration**: Convert personas to full LangChain agents
+- **Database Storage**: Persist workflow results and chat history
+- **Advanced Analytics**: Add workflow performance metrics
+- **Multi-Modal Support**: Handle images, documents, and other media types
+- **API Endpoints**: RESTful API for integration with other systems
+
+## Support
+
+For questions or issues, please refer to the LangChain documentation or create an issue in the repository.
